@@ -1,44 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>💰 نظام محاسبة المتجر</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family:"Cairo",sans-serif; margin:0; background:#0f172a; color:#e2e8f0; direction:rtl; font-size:18px; }
-    header { background:#0b1223; color:#fff; padding:22px; text-align:center; font-size:26px; position:sticky; top:0; z-index:5; }
-    nav { display:flex; justify-content:center; gap:14px; background:#111a33; padding:14px; flex-wrap:wrap; }
-    nav button { background:#0ea5e9; border:none; color:white; padding:16px 26px; border-radius:12px; cursor:pointer; font-size:20px; font-weight:bold; }
-    nav button:hover { background:#0284c7; }
-    section { display:none; max-width:1000px; margin:24px auto; background:#0b1223; padding:22px; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+    body { font-family: "Cairo", sans-serif; margin:0; background:#f5f6fa; direction:rtl; font-size:20px; }
+    header { background:#2c3e50; color:white; padding:25px; text-align:center; font-size:28px; }
+    nav { display:flex; justify-content:center; gap:20px; background:#34495e; padding:15px; flex-wrap:wrap; }
+    nav button { background:#1abc9c; border:none; color:white; padding:20px 40px; border-radius:12px; cursor:pointer; font-size:22px; font-weight:bold; }
+    nav button:hover { background:#16a085; }
+    section { display:none; max-width:1000px; margin:30px auto; background:white; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.15); font-size:22px; }
     section.active { display:block; }
-    label { display:block; margin-top:12px; font-weight:700; font-size:18px; }
-    input,button,select { margin:8px 0; padding:14px; border-radius:10px; border:1px solid #334155; width:100%; box-sizing:border-box; font-size:18px; background:#0f172a; color:#e2e8f0; }
-    input::placeholder { color:#94a3b8; }
-    button.action { background:#22c55e; color:white; border:none; width:100%; font-size:20px; font-weight:800; }
-    button.action:hover { background:#16a34a; }
-    .btn-sm { padding:10px 14px; font-size:16px; border-radius:10px; cursor:pointer; }
-    .edit { background:#f59e0b; color:white; border:none; }
-    .delete { background:#ef4444; color:white; border:none; }
-    .neutral { background:#334155; color:#e2e8f0; border:none; }
-    table { width:100%; border-collapse:collapse; margin-top:16px; font-size:16px; }
-    th,td { border:1px solid #1f2937; padding:10px; text-align:center; }
-    th { background:#0f172a; }
-    .searchBox{ margin:8px 0 14px; display:flex; gap:8px; flex-wrap:wrap; }
-    .searchBox input{ flex:1; }
-
-    /* Scanner */
+    label { display:block; margin-top:15px; font-weight:bold; font-size:22px; }
+    input,button,select { margin:8px 0; padding:18px; border-radius:10px; border:1px solid #bbb; width:100%; box-sizing:border-box; font-size:22px; }
+    button.action { background:#3498db; color:white; border:none; width:100%; font-size:24px; font-weight:bold; }
+    button.action:hover { background:#2980b9; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; font-size:20px; }
+    th,td { border:1px solid #ddd; padding:12px; text-align:center; }
+    th { background:#ecf0f1; font-size:22px; }
     #scanner { display:none; margin:15px auto; width:320px; height:320px; position:relative; border-radius:12px; overflow:hidden; background:#000; }
     .scan-box{ position:absolute; width:86%; height:32%; left:7%; top:34%; border:3px solid #00e5ff; border-radius:10px; pointer-events:none; }
-    .scan-line{ position:absolute; left:8%; width:84%; height:2px; background:#ff3b3b; box-shadow:0 0 8px #ff3b3b,0 0 16px #ff3b3b; animation:sweep 1.3s linear infinite; }
+    .scan-line{ position:absolute; left:8%; width:84%; height:2px; background:#ff3b3b; box-shadow:0 0 8px #ff3b3b, 0 0 16px #ff3b3b; animation:sweep 1.3s linear infinite; }
     @keyframes sweep{ 0%{ top:36%; } 100%{ top:64%; } }
-    #lastScan { text-align:center; font-size:18px; margin-top:8px; font-weight:bold; color:#93c5fd; }
+    #lastScan { text-align:center; font-size:24px; margin-top:10px; font-weight:bold; color:#2c3e50; }
+    .btn-sm { padding:10px 20px; font-size:20px; margin:5px; border-radius:8px; cursor:pointer; }
+    .edit { background:#f39c12; color:white; border:none; }
+    .delete { background:#e74c3c; color:white; border:none; }
+    .neutral { background:#34495e; color:white; border:none; }
 
-    /* Modal */
-    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); opacity:0; pointer-events:none; transition:opacity .2s ease; z-index:999; }
-    .modal.open{ display:flex; opacity:1; pointer-events:auto; }
-    .modal__dialog{ width:min(92vw,420px); background:#0b1223; border:1px solid #1f2937; border-radius:14px; padding:20px; transform:translateY(10px) scale(.98); transition:transform .2s ease; box-shadow:0 16px 36px rgba(0,0,0,.35); text-align:center; }
-    .modal.open .modal__dialog{ transform:translateY(0) scale(1); }
+    /* ✅ Modal */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:999; }
+    .modal.open{ display:flex; }
+    .modal__dialog{ background:white; border-radius:12px; padding:25px; width:400px; max-width:90%; box-shadow:0 8px 24px rgba(0,0,0,.25); text-align:center; }
   </style>
 </head>
 <body>
@@ -50,28 +43,28 @@
     <button onclick="showPage('history')">📊 السجل</button>
   </nav>
 
-  <!-- البيع -->
+  <!-- 💵 البيع -->
   <section id="sell" class="active">
     <h2>💵 بيع منتج</h2>
     <div class="searchBox">
-      <input id="searchInput" placeholder="🔍 بحث بالباركود (مبيعات)">
-      <button class="btn-sm neutral" onclick="startScanner('search')">📷 مسح</button>
-      <button class="btn-sm neutral" onclick="searchPage()">🔎 بحث</button>
+      <input id="searchInput" placeholder="🔍 بحث (مبيعات)">
+      <button class="btn-sm neutral" onclick="startScanner('search')">📷</button>
+      <button class="btn-sm neutral" onclick="searchPage()">🔎</button>
     </div>
     <div id="searchResult"></div>
     <label>📦 الباركود</label>
-    <input id="sellBarcode" placeholder="ادخل الباركود">
+    <input id="sellBarcode">
     <button class="btn-sm neutral" onclick="startScanner('sell')">📷 مسح باركود</button>
     <button class="action" onclick="showSellModal()">✅ تنفيذ البيع</button>
   </section>
 
-  <!-- المنتجات -->
+  <!-- 🛒 المنتجات -->
   <section id="products">
     <h2>🛒 إدارة المنتجات</h2>
     <div class="searchBox">
-      <input id="searchInput" placeholder="🔍 بحث بالباركود (منتجات)">
-      <button class="btn-sm neutral" onclick="startScanner('search')">📷 مسح</button>
-      <button class="btn-sm neutral" onclick="searchPage()">🔎 بحث</button>
+      <input id="searchInput" placeholder="🔍 بحث (منتجات)">
+      <button class="btn-sm neutral" onclick="startScanner('search')">📷</button>
+      <button class="btn-sm neutral" onclick="searchPage()">🔎</button>
     </div>
     <div id="searchResult"></div>
     <label>💲 سعر التكلفة</label><input id="pprice" type="number">
@@ -80,15 +73,15 @@
     <label>🔢 الكمية</label><input id="pstock" type="number">
     <button class="action" onclick="addOrUpdateProduct()">➕ إضافة / تحديث</button>
     <div style="display:flex; gap:8px; margin-top:8px;">
-      <button class="btn-sm" style="background:#22c55e;color:#fff" onclick="openIO('import','products')">📦 استيراد</button>
-      <button class="btn-sm" style="background:#f97316;color:#fff" onclick="openIO('export','products')">📤 تصدير</button>
+      <button class="btn-sm" style="background:#22c55e" onclick="openIO('import','products')">📦 استيراد</button>
+      <button class="btn-sm" style="background:#f97316" onclick="openIO('export','products')">📤 تصدير</button>
     </div>
-    <h2 style="margin-top:18px;">📋 قائمة المنتجات</h2>
+    <h2>📋 قائمة المنتجات</h2>
     <p>💰 القيمة الكلية للبضاعة: <span id="inventoryValue">0</span></p>
     <table id="productsTable"><thead><tr><th>الباركود</th><th>سعر التكلفة</th><th>المخزون</th><th>خيارات</th></tr></thead><tbody></tbody></table>
   </section>
 
-  <!-- الربح -->
+  <!-- 📈 الربح -->
   <section id="profit">
     <h2>📈 صافي الربح</h2>
     <p>💵 إجمالي المبيعات: <span id="totalSales">0</span></p>
@@ -96,18 +89,18 @@
     <p>✅ صافي الربح: <span id="netProfit">0</span></p>
   </section>
 
-  <!-- السجل -->
+  <!-- 📊 السجل -->
   <section id="history">
     <h2>📊 سجل العمليات</h2>
     <div class="searchBox">
-      <input id="searchInput" placeholder="🔍 بحث بالباركود (سجل)">
-      <button class="btn-sm neutral" onclick="startScanner('search')">📷 مسح</button>
-      <button class="btn-sm neutral" onclick="searchPage()">🔎 بحث</button>
+      <input id="searchInput" placeholder="🔍 بحث (سجل)">
+      <button class="btn-sm neutral" onclick="startScanner('search')">📷</button>
+      <button class="btn-sm neutral" onclick="searchPage()">🔎</button>
     </div>
     <div id="searchResult"></div>
     <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <button class="btn-sm" style="background:#22c55e;color:#fff" onclick="openIO('import','history')">📦 استيراد</button>
-      <button class="btn-sm" style="background:#f97316;color:#fff" onclick="openIO('export','history')">📤 تصدير</button>
+      <button class="btn-sm" style="background:#22c55e" onclick="openIO('import','history')">📦 استيراد</button>
+      <button class="btn-sm" style="background:#f97316" onclick="openIO('export','history')">📤 تصدير</button>
     </div>
     <table id="historyTable"><thead><tr><th>النوع</th><th>الباركود</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>التاريخ</th></tr></thead><tbody></tbody></table>
   </section>
@@ -119,7 +112,7 @@
     <label>💲 سعر البيع</label><input id="modalSellPrice" type="number">
     <label>🔢 الكمية</label><input id="modalSellQty" type="number" value="1">
     <div style="display:flex; gap:10px; margin-top:12px;">
-      <button class="btn-sm" style="background:#22c55e;color:#fff" onclick="confirmSale()">✅ تنفيذ البيع</button>
+      <button class="btn-sm" style="background:#22c55e" onclick="confirmSale()">✅ بيع</button>
       <button class="btn-sm delete" data-close>❌ إغلاق</button>
     </div>
   </div></div>
@@ -128,15 +121,15 @@
   <div id="ioModal" class="modal"><div class="modal__dialog">
     <h3 id="ioTitle">📦 عملية</h3>
     <input id="ioMode" type="hidden"><input id="ioSource" type="hidden">
-    <label>📦 الباركود</label><input id="ioBarcode"><button class="btn-sm neutral" onclick="startScanner('io')">📷 مسح</button>
+    <label>📦 الباركود</label><input id="ioBarcode"><button class="btn-sm neutral" onclick="startScanner('io')">📷</button>
     <label>🔢 الكمية</label><input id="ioQty" type="number" value="1">
     <div style="display:flex; gap:10px; margin-top:12px;">
-      <button class="btn-sm" style="background:#22c55e;color:#fff" onclick="processIO()">✅ حفظ</button>
+      <button class="btn-sm" style="background:#22c55e" onclick="processIO()">✅ حفظ</button>
       <button class="btn-sm delete" data-close>❌ إغلاق</button>
     </div>
   </div></div>
 
-  <!-- Scanner -->
+  <!-- الكاميرا -->
   <div id="scanner"><div class="scan-box"><div class="scan-line"></div></div></div>
   <div id="lastScan"></div>
   <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
@@ -148,11 +141,10 @@
     let scannerMode=null;
 
     function saveData(){ localStorage.setItem("products",JSON.stringify(products)); localStorage.setItem("transactions",JSON.stringify(transactions)); }
-
     function loadProducts(){ const tbody=document.querySelector("#productsTable tbody"); tbody.innerHTML=""; let total=0; products.forEach(p=>{ tbody.innerHTML+=`<tr><td>${p.barcode}</td><td>${p.price}</td><td>${p.stock}</td><td><button class="btn-sm edit" onclick="editProduct('${p.barcode}')">✏️</button><button class="btn-sm delete" onclick="deleteProduct('${p.barcode}')">🗑️</button></td></tr>`; total+=(p.price||0)*(p.stock||0); }); document.getElementById("inventoryValue").textContent=total.toFixed(2); }
     function loadHistory(){ const tbody=document.querySelector("#historyTable tbody"); tbody.innerHTML=""; transactions.forEach(t=>{ tbody.innerHTML+=`<tr><td>${t.type}</td><td>${t.barcode}</td><td>${t.qty}</td><td>${t.price}</td><td>${t.total}</td><td>${t.date}</td></tr>`; }); }
 
-    function addOrUpdateProduct(){ const price=parseFloat(document.getElementById("pprice").value)||0; const barcode=document.getElementById("pbarcode").value.trim(); const stock=parseInt(document.getElementById("pstock").value)||0; if(!barcode) return alert("❌ أدخل الباركود"); let p=products.find(x=>x.barcode===barcode); if(p){ p.price=price||p.price; p.stock+=stock; } else { products.push({barcode,price,stock}); } saveData(); loadProducts(); }
+    function addOrUpdateProduct(){ const price=parseFloat(document.getElementById("pprice").value)||0; const barcode=document.getElementById("pbarcode").value.trim(); const stock=parseInt(document.getElementById("pstock").value)||0; if(!barcode)return alert("❌ أدخل الباركود"); let p=products.find(x=>x.barcode===barcode); if(p){ p.price=price||p.price; p.stock+=stock; } else { products.push({barcode,price,stock}); } saveData(); loadProducts(); }
     function editProduct(b){ let p=products.find(x=>x.barcode===b); if(!p)return; document.getElementById("pbarcode").value=p.barcode; document.getElementById("pprice").value=p.price; document.getElementById("pstock").value=p.stock; showPage("products"); }
     function deleteProduct(b){ products=products.filter(p=>p.barcode!==b); saveData(); loadProducts(); }
 
@@ -161,10 +153,12 @@
     function confirmSale(){ const b=document.getElementById("sellBarcode").value.trim(); const q=parseInt(document.getElementById("modalSellQty").value)||0; const pr=parseFloat(document.getElementById("modalSellPrice").value)||0; let p=products.find(x=>x.barcode===b); if(!p||p.stock<q)return alert("❌ مخزون غير كافي"); p.stock-=q; recordTransaction(b,q,pr); saveData(); loadProducts(); loadHistory(); closeModal('sellModal'); alert("✔ تمت عملية البيع"); }
 
     function calcProfit(){ let s=0,c=0; transactions.forEach(t=>{s+=(t.price||0)*(t.qty||0); c+=(t.cost||0);}); document.getElementById("totalSales").textContent=s.toFixed(2); document.getElementById("totalCost").textContent=c.toFixed(2); document.getElementById("netProfit").textContent=(s-c).toFixed(2); }
+    function showPage(id){ document.querySelectorAll("section").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); if(id==="products")loadProducts(); if(id==="history")loadHistory(); if(id==="profit")calcProfit(); const sr=document.getElementById("searchResult"); if(sr)sr.innerHTML=""; }
 
-    function showPage(id){ document.querySelectorAll("section").forEach(s=>s.classList.remove("active")); document.getElementById(id).classList.add("active"); if(id==="products")loadProducts(); if(id==="history")loadHistory(); if(id==="profit")calcProfit(); const sr=document.getElementById("searchResult"); if(sr) sr.innerHTML=""; }
+    function searchPage(){ const code=document.getElementById("searchInput").value.trim(); if(!code)return; const active=document.querySelector("section.active").id; let res=""; if(active==="sell"){ let p=products.find(x=>x.barcode===code); res=p?`المخزون:${p.stock}`:"❌ غير موجود"; } if(active==="products"){ let p=products.find(x=>x.barcode===code); res=p?`الباركود:${p.barcode}, التكلفة:${p.price}, المخزون:${p.stock}`:"❌ غير موجود"; } if(active==="history"){ let logs=transactions.filter(t=>t.barcode===code); res=logs.length?logs.map(t=>`${t.type} • كمية:${t.qty} • ${t.date}`).join("<br>"):"❌ لا يوجد"; } document.getElementById("searchResult").innerHTML=res; }
 
-    function searchPage(){ const code=document.getElementById("searchInput").value.trim(); if(!code)return; const active=document.querySelector("section.active").id; let res=""; if(active==="sell"){ let p=products.find(x=>x.barcode===code); res=p?`المخزون:${p.stock}`:"❌ غير موجود"; } if(active==="products"){ let p=products.find(x=>x.barcode===code); res=p?`الباركود:${p.barcode} • التكلفة:${p.price} • المخزون:${p.stock}`:"❌ غير موجود"; } if(active==="history"){ let logs=transactions.filter(t=>t.barcode===code); res=logs.length?logs.map(t=>`${t.type} • كمية:${t.qty} • ${t.date}`).join("<br>"):"❌ لا يوجد"; } document.getElementById("searchResult").innerHTML=res; }
+    function openIO(mode,src){ document.getElementById("ioMode").value=mode; document.getElementById("ioSource").value=src; document.getElementById("ioTitle").textContent=(mode==='import'?'📦 استيراد':'📤 تصدير'); openModal('ioModal'); }
+    function processIO(){ const mode=document.getElementById("ioMode").value; const src=document.getElementById("ioSource").value; const b=document.getElementById("ioBarcode").value.trim(); const q=parseInt(document.getElementById("ioQty").value)||0; if(!b||q<=0)return alert("❌ أدخل البيانات"); let p=products.find(x=>x.barcode===b); if(src==='products'){ if(!p&&mode==='import'){ products.push({barcode:b,price:0,stock:q}); } else if(p){ if(mode==='import'){ p.stock+=q; } else if(mode==='export'){ if(p.stock<q)return alert("❌ مخزون غير كافي"); p.stock-=q; } } else { return alert("❌ غير موجود للتصدير"); } } transactions.push({type:(mode==='import'?'استيراد':'تصدير'),barcode:b,qty:q,price:0,total:0,cost:0,date:new Date().toLocaleString()}); saveData(); loadProducts(); loadHistory(); closeModal('ioModal'); alert("✔ تمت العملية"); }
 
-    function openIO(mode,src){ document.getElementById("ioMode").value=mode; document.getElementById("ioSource").value=src; document.getElementById("ioTitle").textContent=(mode==='import'?'📦 استيراد':'📤 تصدير'); document.getElementById("ioBarcode").value=""; document.getElementById("ioQty").value=1; openModal('ioModal'); }
-    function processIO(){ const mode=document.getElementById("ioMode").value; const src=document.getElementById("ioSource").value; const b=document.getElementById("ioBarcode").value.trim(); const q=parseInt(document.getElementById("ioQty").value)||0; if(!b||q<=0)return alert("❌ أدخل البيانات"); let p=products.find(x=>x.barcode===b); if(src==='products'){ if(!p
+    /* Modal Helpers */
+    function
